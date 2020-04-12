@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TitanGate.Entities\TitanGate.WebSiteStore.Entities.csproj" />
+    <ProjectReference Include="..\TitanGate.WebSiteStore.RepositoryImpl\TitanGate.WebSiteStore.RepositoryImpl.csproj" />
+    <ProjectReference Include="..\TitanGate.WebSiteStore.Repository\TitanGate.WebSiteStore.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
