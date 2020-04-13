@@ -23,27 +23,27 @@ namespace TitanGate.WebSiteStore.Services
 
         public async Task DeleteWebSite(int webSiteId)
         {
-            return await _webSiteRepository.
+            await _webSiteRepository.Delete(webSiteId);
         }
 
-        public async Task<IList<WebSite>> GetAllWebsites()
+        public async Task<IEnumerable<WebSite>> GetAllWebsites()
         {
-            throw new NotImplementedException();
+            return await _webSiteRepository.FindAll();
         }
 
         public async Task<WebSite> GetWebSite(int webSiteId)
         {
-            throw new NotImplementedException();
+            return await _webSiteRepository.FindById(webSiteId);
         }
 
-        public async Task<IList<WebSite>> GetWebSites(WebSiteSearchObject searchObject)
+        public async Task<IEnumerable<WebSite>> GetWebSites(WebSiteSearchObject searchObject)
         {
-            throw new NotImplementedException();
+            return await _webSiteRepository.FindByFilter(searchObject);
         }
 
         public async Task UpdateWebSite(WebSite webSite)
         {
-            throw new NotImplementedException();
+            await _webSiteRepository.Update(webSite);
         }
     }
 }

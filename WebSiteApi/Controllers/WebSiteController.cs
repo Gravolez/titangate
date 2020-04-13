@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TitanGate.WebSiteStore.Api.Mappers;
 using TitanGate.WebSiteStore.Api.Models;
+using TitanGate.WebSiteStore.Entities;
 using TitanGate.WebSiteStore.Entities.DB;
 using TitanGate.WebSiteStore.Services;
 
@@ -16,12 +17,17 @@ namespace TitanGate.WebSiteStore.Api.Controllers
     public class WebSiteController : ControllerBase
     {
         private readonly IWebSiteService _webSiteService;
-        private readonly IMapper<WebSiteModel, WebSite> _mapper;
+        private readonly IMapper<WebSiteModel, WebSite> _webSiteMapper;
+        private readonly IMapper<SearchObjectModel, WebSiteSearchObject> _searchObjectMapper;
 
-        public WebSiteController(IWebSiteService webSiteService, IMapper<WebSiteModel, WebSite> mapper)
+        public WebSiteController(
+            IWebSiteService webSiteService, 
+            IMapper<WebSiteModel, WebSite> webSiteMapper, 
+            IMapper<SearchObjectModel, WebSiteSearchObject> searchObjectMapper)
         {
             _webSiteService = webSiteService;
-            _mapper = mapper;
+            _webSiteMapper = webSiteMapper;
+            _searchObjectMapper = searchObjectMapper;
         }
 
         [HttpGet]
@@ -29,8 +35,8 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
-            IList<WebSite> result = await _webSiteService.GetAllWebsites();
-            return Ok(result.Select(x => _mapper.EntityToModel(x)).ToArray());
+            IEnumerable<WebSite> result = await _webSiteService.GetAllWebsites();
+            return Ok(result.Select(x => _webSiteMapper.EntityToModel(x)).ToArray());
         }
 
         [HttpGet("{webSiteId}", Name = "Get")]
@@ -39,13 +45,13 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         public async Task<IActionResult> Get(int webSiteId)
         {
             WebSite result = await _webSiteService.GetWebSite(webSiteId);
-            return Ok(_mapper.EntityToModel(result));
+            return Ok(_webSiteMapper.EntityToModel(result));
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] WebSiteModel value)
         {
-            WebSite webSite = _mapper.ModelToEntity(value);
+            WebSite webSite = _webSiteMapper.ModelToEntity(value);
             int id = await _webSiteService.CreateWebSite(webSite);
             return Ok(id);
         }
@@ -55,7 +61,7 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put(int webSiteId, [FromBody] WebSiteModel value)
         {
-            WebSite webSite = _mapper.ModelToEntity(value);
+            WebSite webSite = _webSiteMapper.ModelToEntity(value);
             await _webSiteService.UpdateWebSite(webSite);
             return Ok();
         }
@@ -71,9 +77,10 @@ namespace TitanGate.WebSiteStore.Api.Controllers
 
         [HttpPost]
         [Route("page")]
-        public async Task<IActionResult> GetPagedResults()
+        public async Task<IActionResult> GetPagedResults([FromBody] SearchObjectModel searchObjectModel)
         {
-
+            IEnumerable<WebSite> result = await _webSiteService.GetWebSites(_searchObjectMapper.ModelToEntity(searchObjectModel));
+            return Ok(result.Select(x => _webSiteMapper.EntityToModel(x)).ToArray());
         }
     }
 }

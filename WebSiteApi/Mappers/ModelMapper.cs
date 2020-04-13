@@ -20,7 +20,7 @@ namespace TitanGate.WebSiteStore.Api.Mappers
                 Category = (WebSiteCategoryEnum)webSiteEntity.Category.Id,
                 Id = webSiteEntity.Id,
                 Email = webSiteEntity.Login.Email,
-                Password = webSiteEntity.Login.Pass
+                Password = webSiteEntity.Login.Password
             };
         }
 

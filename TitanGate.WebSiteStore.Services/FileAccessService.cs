@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace TitanGate.WebSiteStore.Services
     {
         private readonly AppSettings _settings;
 
-        public FileAccessService(AppSettings settings)
+        public FileAccessService(IOptions<AppSettings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
         }
 
         public string GetFileName(int id, FileCategoryEnum fileCategory, string extension)

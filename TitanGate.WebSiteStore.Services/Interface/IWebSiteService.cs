@@ -11,7 +11,7 @@ namespace TitanGate.WebSiteStore.Services
         Task<int> CreateWebSite(WebSite webSite);
         Task UpdateWebSite(WebSite webSite);
         Task DeleteWebSite(int webSiteId);
-        Task<IList<WebSite>> GetAllWebsites();
-        Task<IList<WebSite>> GetWebSites(WebSiteSearchObject searchObject);
+        Task<IEnumerable<WebSite>> GetAllWebsites();
+        Task<IEnumerable<WebSite>> GetWebSites(WebSiteSearchObject searchObject);
     }
 }

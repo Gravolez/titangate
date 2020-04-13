@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanGate.WebSiteStore.Api", "WebSiteApi\TitanGate.WebSiteStore.Api.csproj", "{77B5B7C7-E45C-4179-B832-9CAEEA544624}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.Api", "WebSiteApi\TitanGate.WebSiteStore.Api.csproj", "{77B5B7C7-E45C-4179-B832-9CAEEA544624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanGate.WebSiteStore.Entities", "TitanGate.Entities\TitanGate.WebSiteStore.Entities.csproj", "{6280DB0A-E9D5-4C55-93AA-FD8184D637E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.Entities", "TitanGate.Entities\TitanGate.WebSiteStore.Entities.csproj", "{6280DB0A-E9D5-4C55-93AA-FD8184D637E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanGate.WebSiteStore.Repository", "TitanGate.WebSiteStore.Repository\TitanGate.WebSiteStore.Repository.csproj", "{3B52627B-89E5-4134-96B8-9BA994367FD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.Repository", "TitanGate.WebSiteStore.Repository\TitanGate.WebSiteStore.Repository.csproj", "{3B52627B-89E5-4134-96B8-9BA994367FD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanGate.WebSiteStore.Services", "TitanGate.WebSiteStore.Services\TitanGate.WebSiteStore.Services.csproj", "{7D550FC6-4E49-4BD2-A04E-D3297DE41A90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.Services", "TitanGate.WebSiteStore.Services\TitanGate.WebSiteStore.Services.csproj", "{7D550FC6-4E49-4BD2-A04E-D3297DE41A90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanGate.WebSiteStore.RepositoryImpl", "TitanGate.WebSiteStore.RepositoryImpl\TitanGate.WebSiteStore.RepositoryImpl.csproj", "{F3E8F802-0755-46DA-BE3B-8FB566C61825}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.DapperRepository", "TitanGate.WebSiteStore.RepositoryImpl\TitanGate.WebSiteStore.DapperRepository.csproj", "{F3E8F802-0755-46DA-BE3B-8FB566C61825}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

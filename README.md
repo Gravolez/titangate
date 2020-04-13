@@ -1,4 +1,3 @@
-
 1. Database 
 
 1.1. Installation
@@ -7,13 +6,15 @@
 
 `Setup.exe /SkipRules=RebootRequiredCheck /Action=INSTALL`
 
-1.2. Initialization
+1.2 Initialization
 
-Use the provided script
+Use the provided script in `SQL\init.sql`
 
 2. How to run the code
 
-TO DO
+You need:
+* visual studio 2019 or something similar
+* .net core 3.1.3 SDK
 
 3. Assumptions
 
@@ -45,4 +46,13 @@ Also of course I keep it encrypted in the DB so that if someone gets access to t
 
 3.2 Database:
 
-3.1.1. With very fiew entities needing storage I could have gone for NoSQL, but I have never used 
+3.2.1 With very fiew entities needing storage I could have gone for NoSQL, but I have never used it
+
+Additional info:
+
+External libraries used:
+ - Dapper - mini ORM (I've never used it before and wanted to try it out)
+ - Microsoft dependency injection *
+ 
+Patterns used:
+ - unit of work + repository. Well ... not quite because we have to save the entities explicitly and cannot save the whole session as is done in Nhibernate and EntityFramework but it's close enough. The gain of explicitly knowing which thing is saved when is actually not a bad thing to have sometimes. I did not see a reason to optimize one way or the other.

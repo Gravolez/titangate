@@ -9,10 +9,10 @@ namespace TitanGate.WebSiteStore.Repository
     public interface IWebSiteRepository
     {
         Task<WebSite> FindById(int id);
-        Task<IList<WebSite>> FindAll();
+        Task<IEnumerable<WebSite>> FindAll();
         Task<int> Create(WebSite webSite);
-        Task UpdateWebsite(WebSite webSite);
-        Task<IList<WebSite>> FindByFilter(WebSiteSearchObject searchObject);
+        Task Update(WebSite webSite);
+        Task<IEnumerable<WebSite>> FindByFilter(WebSiteSearchObject searchObject);
         Task Delete(int id);
     }
 }
