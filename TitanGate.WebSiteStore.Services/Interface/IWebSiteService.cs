@@ -13,5 +13,7 @@ namespace TitanGate.WebSiteStore.Services
         Task DeleteWebSite(int webSiteId);
         Task<IEnumerable<WebSite>> GetAllWebsites();
         Task<IEnumerable<WebSite>> GetWebSites(WebSiteSearchObject searchObject);
+        Task UploadFile(int webSiteId, byte[] file, string extension);
+        Task<byte[]> DownloadFile(int webSiteId);
     }
 }

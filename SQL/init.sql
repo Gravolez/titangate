@@ -26,7 +26,10 @@ CREATE TABLE dbo.WebSite (
         CONSTRAINT DF_WebSite_IsDeleted DEFAULT 0,
     CategoryId int NOT NULL,
     Email NVARCHAR(320) NOT NULL,
-    Pass NVARCHAR(256) NOT NULL,
+    [Password] NVARCHAR(256) NOT NULL,
+    HasScreenshot BIT NOT NULL,
+        CONSTRAINT DF_WebSite_HasScreenshot DEFAULT 0,
+    ScreenshotExt NVARCHAR(10),
     CONSTRAINT PK_WebSite PRIMARY KEY (Id),
     CONSTRAINT FK_WebSite_CategoryId FOREIGN KEY (CategoryId) REFERENCES dbo.Category (Id)
 )

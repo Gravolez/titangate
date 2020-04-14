@@ -9,6 +9,7 @@ namespace TitanGate.WebSiteStore.Entities.DB
         public string Url { get; set; }
         public WebSiteCategory Category { get; set; }
         public bool IsDeleted { get; set; }
+        public string ScreenshotExt { get; set; }
         public bool HasScreenshot { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

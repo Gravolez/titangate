@@ -18,7 +18,7 @@ namespace TitanGate.WebSiteStore.Services
             _settings = settings.Value;
         }
 
-        public string GetFileName(int id, FileCategoryEnum fileCategory, string extension)
+        public (string dir, string file) GetFileName(int id, FileCategoryEnum fileCategory, string extension)
         {
             const int totalLength = 6;
             const int chunkSize = 2;
@@ -27,11 +27,12 @@ namespace TitanGate.WebSiteStore.Services
                 .Select(i => paddedFileName.Substring(i * chunkSize, chunkSize));
             var fileName = Path.Combine(result.ToArray()) + extension;
 
-            return Path.Combine(
+            var filePath = Path.Combine(
                 _settings.BaseAppFolder, 
                 _settings.BaseFilesFolder, 
                 Enum.GetName(typeof(FileCategoryEnum), fileCategory), 
                 fileName);
+            return (Path.GetDirectoryName(filePath), Path.GetFileName(filePath));
         }
     }
 }

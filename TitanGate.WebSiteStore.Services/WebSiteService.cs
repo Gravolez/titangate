@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using TitanGate.WebSiteStore.Entities;
 using TitanGate.WebSiteStore.Entities.DB;
+using TitanGate.WebSiteStore.Entities.Exceptions;
 using TitanGate.WebSiteStore.Repository;
 
 namespace TitanGate.WebSiteStore.Services
@@ -11,11 +13,13 @@ namespace TitanGate.WebSiteStore.Services
     {
         private readonly IWebSiteRepository _webSiteRepository;
         private readonly IRepositorySession _session;
+        private readonly IFileAccessService _fileAccessService;
 
-        public WebSiteService(IWebSiteRepository webSiteRepository, IRepositorySession session)
+        public WebSiteService(IWebSiteRepository webSiteRepository, IRepositorySession session, IFileAccessService fileAccessService)
         {
             _webSiteRepository = webSiteRepository;
             _session = session;
+            _fileAccessService = fileAccessService;
         }
 
         public async Task<int> CreateWebSite(WebSite webSite)
@@ -49,6 +53,35 @@ namespace TitanGate.WebSiteStore.Services
         {
             using var unitOfWork = _session.BeginWork();
             await _webSiteRepository.Update(webSite);
+        }
+
+        public async Task UploadFile(int webSiteId, byte[] file, string extension)
+        {
+            using var unitOFWork = _session.BeginWork();
+            WebSite webSite = await _webSiteRepository.FindById(webSiteId);
+            (string dir, string fileName) = _fileAccessService.GetFileName(webSiteId, FileCategoryEnum.WebsiteScreenshot, extension);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            await File.WriteAllBytesAsync(Path.Combine(dir, fileName), file);
+            webSite.ScreenshotExt = extension;
+            webSite.HasScreenshot = true;
+            await _webSiteRepository.Update(webSite);
+            unitOFWork.Persist();
+        }
+
+        public async Task<byte[]> DownloadFile(int webSiteId)
+        {
+            using var unitOFWork = _session.BeginWork();
+            WebSite webSite = await _webSiteRepository.FindById(webSiteId);
+            if (!webSite.HasScreenshot)
+            {
+                throw new WebSiteStoreException("No screenshot for this site");
+            }
+            (string dir, string fileName) = _fileAccessService.GetFileName(webSiteId, FileCategoryEnum.WebsiteScreenshot, webSite.ScreenshotExt);
+            return await File.ReadAllBytesAsync(Path.Combine(dir, fileName));
         }
     }
 }

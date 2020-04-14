@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,11 +15,13 @@ namespace TitanGate.WebSiteStore.Api.Mappers
     {
         private readonly IMapper<CategoryModel, WebSiteCategory> _categoryMapper;
         private readonly ICryptoService _cryptoService;
+        private readonly AppSettings _settings;
 
-        public WebSiteMapper(IMapper<CategoryModel, WebSiteCategory> categoryMapper, ICryptoService cryptoService)
+        public WebSiteMapper(IMapper<CategoryModel, WebSiteCategory> categoryMapper, ICryptoService cryptoService, IOptions<AppSettings> settings)
         {
             _categoryMapper = categoryMapper;
             _cryptoService = cryptoService;
+            _settings = settings.Value;
         }
 
         public WebSiteModel EntityToModel(WebSite webSiteEntity)
@@ -30,7 +33,8 @@ namespace TitanGate.WebSiteStore.Api.Mappers
                 Category = _categoryMapper.EntityToModel(webSiteEntity.Category),
                 Id = webSiteEntity.Id,
                 Email = webSiteEntity.Email,
-                Password = _cryptoService.Encrypt(webSiteEntity.Password)
+                Password = _cryptoService.Decrypt(webSiteEntity.Password),
+                // ScreenshotUrl = webSiteEntity.Screenshot
             };
         }
 

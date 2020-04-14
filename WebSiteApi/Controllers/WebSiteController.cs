@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -21,8 +22,8 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         private readonly IMapper<SearchObjectModel, WebSiteSearchObject> _searchObjectMapper;
 
         public WebSiteController(
-            IWebSiteService webSiteService, 
-            IMapper<WebSiteModel, WebSite> webSiteMapper, 
+            IWebSiteService webSiteService,
+            IMapper<WebSiteModel, WebSite> webSiteMapper,
             IMapper<SearchObjectModel, WebSiteSearchObject> searchObjectMapper)
         {
             _webSiteService = webSiteService;
@@ -81,6 +82,27 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         {
             IEnumerable<WebSite> result = await _webSiteService.GetWebSites(_searchObjectMapper.ModelToEntity(searchObjectModel));
             return Ok(result.Select(x => _webSiteMapper.EntityToModel(x)).ToArray());
+        }
+
+        [HttpPost()]
+        [Route("{webSiteId}/screenshot")]
+        public async Task<IActionResult> UploadScreenshot([FromRoute]int webSiteId, [FromForm] IFormFile screenshot)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await screenshot.CopyToAsync(memoryStream);
+                byte[] fileContents = memoryStream.ToArray();
+                await _webSiteService.UploadFile(webSiteId, fileContents, Path.GetExtension(screenshot.FileName));
+            }
+            return Ok();
+        }
+
+        [HttpGet()]
+        [Route("{webSiteId}/screenshot")]
+        public async Task<IActionResult> DownloadScreenshot([FromRoute]int webSiteId)
+        {
+            byte[] file = await _webSiteService.DownloadFile(webSiteId);
+            return File(file, "application/octet-stream");
         }
     }
 }

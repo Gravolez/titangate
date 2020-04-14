@@ -1,10 +1,8 @@
 1. Database 
 
-1.1. Installation
-* I used SQL Express 2019. I suppose you can use (almost) any MS SQL server since I have not used any tricky SQL features.
-* In case there is a problem with the installation requiring reboot you can do this:
-
-`Setup.exe /SkipRules=RebootRequiredCheck /Action=INSTALL`
+1.1
+`SQLLocalDB c "WebSiteStore"`
+`SQLLocalDB start "WebSiteStore"`
 
 1.2 Initialization
 
@@ -53,6 +51,7 @@ Additional info:
 External libraries used:
  - Dapper - mini ORM (I've never used it before and wanted to try it out)
  - Microsoft dependency injection *
+ - Microsoft.
  
 Patterns used:
  - unit of work + repository. Well ... not quite because we have to save the entities explicitly and cannot save the whole session as is done in Nhibernate and EntityFramework but it's close enough. The gain of explicitly knowing which thing is saved when is actually not a bad thing to have sometimes. I did not see a reason to optimize one way or the other.

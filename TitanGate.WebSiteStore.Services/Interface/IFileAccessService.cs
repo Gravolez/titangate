@@ -8,6 +8,6 @@ namespace TitanGate.WebSiteStore.Services
 {
     public interface IFileAccessService
     {
-        string GetFileName(int id, FileCategoryEnum fileCategory, string extension);
+        (string dir, string file) GetFileName(int id, FileCategoryEnum fileCategory, string extension);
     }
 }

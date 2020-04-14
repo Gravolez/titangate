@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "10f21ff6-5758-4e6b-be3f-19957d0e7e01",
+		"name": "WebSiteStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "WebSite",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:61111/api/website",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": null,\r\n    \"name\": \"Name 1\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 1,\r\n        \"name\": \"Porn\"\r\n    },\r\n    \"email\": \"asd@asd.asd\",\r\n    \"password\": \"mnogo taina parola\",\r\n    \"screenshotUrl\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:61111/api/website",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:61111/api/website/14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website",
+								"14"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:61111/api/website/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 10,\r\n    \"name\": \"zorp\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 5,\r\n        \"name\": \"Software\"\r\n    },\r\n    \"email\": \"asd@asd.asd\",\r\n    \"password\": \"great\",\r\n    \"screenshotUrl\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:61111/api/website/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPaged",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:61111/api/website/paged",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website",
+								"paged"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

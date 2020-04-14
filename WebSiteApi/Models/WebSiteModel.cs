@@ -12,7 +12,7 @@ namespace TitanGate.WebSiteStore.Api.Models
         public string Name { get; set; }
         public string Url { get; set; }
         public CategoryModel Category { get; set; }
-        public string Email { get; internal set; }
+        public string Email { get; set; }
         public string Password { get; set; }
         public string ScreenshotUrl { get; set; }
     }
