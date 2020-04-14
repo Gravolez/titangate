@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace TitanGate.WebSiteStore.Api.Models
 {
-    [Serializable]
-    public enum WebSiteCategoryEnum
+    public class CategoryModel
     {
-        Porn = 1,
-        Betting = 2,
-        Entertainment = 3,
-        Science = 4
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

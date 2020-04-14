@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 
 namespace TitanGate.WebSiteStore.Repository
 {
-    public interface IUnitOfWork: IDisposable
+    public interface IRepositorySession
     {
-        void Persist();
-        void Rollback();
+        IUnitOfWork BeginWork();
     }
 }

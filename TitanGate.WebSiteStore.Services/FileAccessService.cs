@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TitanGate.WebSiteStore.Entities;
-using TitanGate.WebSiteStore.Services.Interface;
 
 namespace TitanGate.WebSiteStore.Services
 {

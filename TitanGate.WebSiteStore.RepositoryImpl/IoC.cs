@@ -12,8 +12,7 @@ namespace TitanGate.WebSiteStore.DapperRepository
         {
             return services
                 .AddTransient<IWebSiteRepository, WebSiteRepository>()
-                .AddTransient<IUnitOfWork, UnitOfWork>()
-                .AddScoped<ISqlConnectionStore, SqlConnectionStore>();
+                .AddScoped<IRepositorySession, RepositorySession>();
         }
     }
 }

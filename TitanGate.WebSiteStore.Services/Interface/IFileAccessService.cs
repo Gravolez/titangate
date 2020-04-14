@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TitanGate.WebSiteStore.Entities;
 
-namespace TitanGate.WebSiteStore.Services.Interface
+namespace TitanGate.WebSiteStore.Services
 {
     public interface IFileAccessService
     {

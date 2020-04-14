@@ -10,35 +10,45 @@ namespace TitanGate.WebSiteStore.DapperRepository
 {
     public class WebSiteRepository : IWebSiteRepository
     {
-        private readonly ISqlConnectionStore _sqlConnectionStore;
+        private readonly RepositorySession _repositorySession;
 
-        public WebSiteRepository(ISqlConnectionStore sqlConnectionStore)
+        public WebSiteRepository(IRepositorySession repositorySession)
         {
-            _sqlConnectionStore = sqlConnectionStore;
+            _repositorySession = (RepositorySession)repositorySession;
         }
 
         public async Task<int> Create(WebSite webSite)
         {
-            int newId = await _sqlConnectionStore.Connection.QuerySingleAsync<int>(
+            int newId = await _repositorySession.Connection.QuerySingleAsync<int>(
                 @"INSERT INTO dbo.WebSite (Name, Url, CategoryId,) 
                 OUTPUT INSERTED.[Id]
-                VALUES (@Name, @Url, @CategoryId, @Email, @)", webSite);
+                VALUES (@Name, @Url, @CategoryId, @Email, @)", 
+                webSite, 
+                _repositorySession.CurrentTransaction);
             return newId;
         }
 
         public async Task Delete(int id)
         {
-            await _sqlConnectionStore.Connection.ExecuteAsync(@"DELETE FROM dbo.WebSite WHERE Id = @Id", id);
+            await _repositorySession.Connection.ExecuteAsync(
+                @"DELETE FROM dbo.WebSite WHERE Id = @Id", 
+                id,
+                _repositorySession.CurrentTransaction);
         }
 
         public async Task<IEnumerable<WebSite>> FindAll()
         {
-            return await _sqlConnectionStore.Connection.QueryAsync<WebSite>(@"SELECT * FROM dbo.WebSite");
+            var result = await _repositorySession.Connection.QueryAsync<WebSite>(
+                @"SELECT * FROM dbo.WebSite", 
+                null, 
+                _repositorySession.CurrentTransaction);
+            Console.WriteLine("dafuq");
+            return result;
         }
 
         public async Task<IEnumerable<WebSite>> FindByFilter(WebSiteSearchObject searchObject)
         {
-            return await _sqlConnectionStore.Connection.QueryAsync<WebSite>(
+            return await _repositorySession.Connection.QueryAsync<WebSite>(
                 @"SELECT t.* 
                 FROM (
                     SELECT *, ROW_NUMBER() as RowNumber
@@ -51,7 +61,8 @@ namespace TitanGate.WebSiteStore.DapperRepository
                     SortOrder = searchObject.SortExpression,
                     PageStart = 1 + ((searchObject.PageNumber - 1) * searchObject.PageSize),
                     PageEnd = searchObject.PageNumber * searchObject.PageSize
-                });
+                },
+                _repositorySession.CurrentTransaction);
         }
 
         public async Task<WebSite> FindById(int id)

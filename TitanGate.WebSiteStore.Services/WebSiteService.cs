@@ -10,19 +10,23 @@ namespace TitanGate.WebSiteStore.Services
     public class WebSiteService : IWebSiteService
     {
         private readonly IWebSiteRepository _webSiteRepository;
+        private readonly IRepositorySession _session;
 
-        public WebSiteService(IWebSiteRepository webSiteRepository)
+        public WebSiteService(IWebSiteRepository webSiteRepository, IRepositorySession session)
         {
             _webSiteRepository = webSiteRepository;
+            _session = session;
         }
 
         public async Task<int> CreateWebSite(WebSite webSite)
         {
+            using var unitOfWork = _session.BeginWork();
             return await _webSiteRepository.Create(webSite);
         }
 
         public async Task DeleteWebSite(int webSiteId)
         {
+            using var unitOfWork = _session.BeginWork();
             await _webSiteRepository.Delete(webSiteId);
         }
 
@@ -43,6 +47,7 @@ namespace TitanGate.WebSiteStore.Services
 
         public async Task UpdateWebSite(WebSite webSite)
         {
+            using var unitOfWork = _session.BeginWork();
             await _webSiteRepository.Update(webSite);
         }
     }

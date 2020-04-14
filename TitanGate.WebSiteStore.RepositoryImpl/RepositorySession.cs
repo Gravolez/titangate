@@ -5,20 +5,22 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using TitanGate.WebSiteStore.Entities;
+using TitanGate.WebSiteStore.Repository;
 
 namespace TitanGate.WebSiteStore.DapperRepository
 {
-    public class SqlConnectionStore : ISqlConnectionStore
+    public class RepositorySession : IRepositorySession
     {
         private readonly AppSettings _appSettings;
+        private IDbTransaction _dbTransaction;
         private IDbConnection _dbConnection;
 
-        public SqlConnectionStore(IOptions<AppSettings> settings)
+        public RepositorySession(IOptions<AppSettings> settings)
         {
             _appSettings = settings.Value;
         }
 
-        public IDbConnection Connection
+        internal IDbConnection Connection
         {
             get
             {
@@ -32,12 +34,31 @@ namespace TitanGate.WebSiteStore.DapperRepository
             }
         }
 
+       internal IDbTransaction CurrentTransaction
+        {
+            get
+            {
+                if (_dbTransaction == null)
+                {
+                    _dbTransaction = Connection.BeginTransaction();
+                }
+
+                return _dbTransaction;
+            }
+        }
+
+        public IUnitOfWork BeginWork()
+        {
+            return new UnitOfWork(CurrentTransaction);
+        }
+
         public void Dispose()
         {
+            _dbConnection.Close();
             _dbConnection.Dispose();
         }
 
-        ~SqlConnectionStore()
+        ~RepositorySession()
         {
             _dbConnection.Dispose();
         }

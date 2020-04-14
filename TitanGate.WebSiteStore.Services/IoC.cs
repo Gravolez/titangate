@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using TitanGate.WebSiteStore.DapperRepository;
 using TitanGate.WebSiteStore.Services;
-using TitanGate.WebSiteStore.Services.Interface;
 
 namespace TitanGate.WebSiteStore.Services
 {
@@ -15,6 +14,7 @@ namespace TitanGate.WebSiteStore.Services
             return services
                 .AddTransient<IFileAccessService, FileAccessService>()
                 .AddTransient<IWebSiteService, WebSiteService>()
+                .AddTransient<ICryptoService, CryptoService>()
                 .AddWebStoreDapperRepository();
         }
     }

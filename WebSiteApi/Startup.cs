@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TitanGate.WebSiteStore.Api.Mappers;
+using TitanGate.WebSiteStore.Api.Models;
 using TitanGate.WebSiteStore.Entities;
+using TitanGate.WebSiteStore.Entities.DB;
 using TitanGate.WebSiteStore.Services;
 
 namespace WebSiteApi
@@ -25,6 +28,9 @@ namespace WebSiteApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IMapper<CategoryModel, WebSiteCategory>, CategoryMapper>();
+            services.AddTransient<IMapper<WebSiteModel, WebSite>, WebSiteMapper>();
+            services.AddTransient<IMapper<SearchObjectModel, WebSiteSearchObject>, SearchObjectMapper>();
             services.Configure<AppSettings>(Configuration);
             services.AddControllers();
             services.AddWebStoreServices();

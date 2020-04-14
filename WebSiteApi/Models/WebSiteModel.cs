@@ -8,11 +8,12 @@ namespace TitanGate.WebSiteStore.Api.Models
     [Serializable]
     public class WebSiteModel
     {
+        public int? Id { get; set; }
         public string Name { get; set; }
-        public Uri Url { get; set; }
-        public int Id { get; set; }
-        public WebSiteCategoryEnum Category { get; set; }
-        public object Email { get; internal set; }
-        public object Password { get; internal set; }
+        public string Url { get; set; }
+        public CategoryModel Category { get; set; }
+        public string Email { get; internal set; }
+        public string Password { get; set; }
+        public string ScreenshotUrl { get; set; }
     }
 }

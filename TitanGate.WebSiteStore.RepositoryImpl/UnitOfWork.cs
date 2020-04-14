@@ -12,29 +12,28 @@ namespace TitanGate.WebSiteStore.DapperRepository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private static int _transactionCount = 0;
-        private readonly ISqlConnectionStore _sqlConnectionStore;
+        private readonly IDbTransaction _currentTransaction;
+        private bool _finished = false;
 
-        public IWebSiteRepository WebSiteRepository { get; private set; }
-
-        public UnitOfWork(ISqlConnectionStore sqlConnectionStore)
+        public UnitOfWork(IDbTransaction dbTransaction)
         {
-            _sqlConnectionStore = sqlConnectionStore;
+            _currentTransaction = dbTransaction;
         }
 
-        public IDbTransaction BeginTransaction()
+        public void Persist()
         {
-            _transactionCount++;
-            return _sqlConnectionStore.Connection.BeginTransaction();
+            _currentTransaction.Commit();
+            _finished = true;
+        }
+
+        public void Rollback()
+        {
+            _currentTransaction.Rollback();
+            _finished = true;
         }
 
         public void Dispose()
         {
-            _transactionCount--;
-            if (_transactionCount == 0)
-            {
-                _sqlConnectionStore.Connection.Close();
-            }
         }
     }
 }
