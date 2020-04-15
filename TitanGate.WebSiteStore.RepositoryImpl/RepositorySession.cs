@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using TitanGate.WebSiteStore.Entities;
+using TitanGate.WebSiteStore.Entities.Exceptions;
 using TitanGate.WebSiteStore.Repository;
 
 namespace TitanGate.WebSiteStore.DapperRepository
@@ -38,24 +39,37 @@ namespace TitanGate.WebSiteStore.DapperRepository
         {
             get
             {
-                if (_dbTransaction == null)
-                {
-                    _dbTransaction = Connection.BeginTransaction();
-                }
-
                 return _dbTransaction;
             }
         }
 
         public IUnitOfWork BeginWork()
         {
-            return new UnitOfWork(CurrentTransaction);
+            if (_dbTransaction != null)
+            {
+                throw new WebSiteStoreException("UnitOfWork canno be in another UnitOfWork");
+            }
+
+            _dbTransaction = Connection.BeginTransaction();
+            return new UnitOfWork(Commit, Rollback);
         }
 
         public void Dispose()
         {
             _dbConnection.Close();
             _dbConnection.Dispose();
+        }
+
+        private void Commit()
+        {
+            _dbTransaction.Commit();
+            _dbTransaction = null;
+        }
+
+        private void Rollback()
+        {
+            _dbTransaction.Rollback();
+            _dbTransaction = null;
         }
 
         ~RepositorySession()

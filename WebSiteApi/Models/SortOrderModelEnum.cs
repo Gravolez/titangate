@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 namespace TitanGate.WebSiteStore.Api.Models
 {
     [Serializable]
-    public enum SortFieldEnum
+    public enum SortOrderModelEnum
     {
-        Name = 1,
-        Url,
-        Category,
-
+        Asc = 1,
+        Desc
     }
 }

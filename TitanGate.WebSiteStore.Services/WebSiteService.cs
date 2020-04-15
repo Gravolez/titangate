@@ -30,17 +30,17 @@ namespace TitanGate.WebSiteStore.Services
             return result;
         }
 
-        public async Task DeleteWebSite(int webSiteId)
+        public async Task<bool> DeleteWebSite(int webSiteId)
         {
             using var unitOfWork = _session.BeginWork();
-            await _webSiteRepository.Delete(webSiteId);
+            bool result = await _webSiteRepository.Delete(webSiteId);
+            unitOfWork.Persist();
+            return result;
         }
 
         public async Task<IEnumerable<WebSite>> GetAllWebsites()
         {
             var result = await _webSiteRepository.FindAll();
-            result.
-
             return result;
         }
 
@@ -54,11 +54,12 @@ namespace TitanGate.WebSiteStore.Services
             return await _webSiteRepository.FindByFilter(searchObject);
         }
 
-        public async Task UpdateWebSite(WebSite webSite)
+        public async Task<bool> UpdateWebSite(WebSite webSite)
         {
             using var unitOfWork = _session.BeginWork();
-            await _webSiteRepository.Update(webSite);
+            bool result = await _webSiteRepository.Update(webSite);
             unitOfWork.Persist();
+            return result;
         }
 
         public async Task UploadFile(int webSiteId, byte[] file, string extension)
@@ -84,7 +85,7 @@ namespace TitanGate.WebSiteStore.Services
             WebSite webSite = await _webSiteRepository.FindById(webSiteId);
             if (!webSite.HasScreenshot)
             {
-                throw new WebSiteStoreException("No screenshot for this site");
+                throw new WebSiteStoreNotFoundException("No screenshot for this site");
             }
             (string dir, string fileName) = _fileAccessService.GetFileName(webSiteId, FileCategoryEnum.WebsiteScreenshot, webSite.ScreenshotExt);
             byte[] file = await File.ReadAllBytesAsync(Path.Combine(dir, fileName));

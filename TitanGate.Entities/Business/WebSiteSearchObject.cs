@@ -9,6 +9,6 @@ namespace TitanGate.WebSiteStore.Entities
     {
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
-        public string SortExpression { get; set; }
+        public IList<(SortColumn sortColumn, SortOrder sortOrder)> SortExpression { get; set; }
     }
 }

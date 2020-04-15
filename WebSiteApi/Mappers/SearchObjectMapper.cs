@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TitanGate.WebSiteStore.Api.Models;
 using TitanGate.WebSiteStore.Entities;
 
@@ -16,7 +14,19 @@ namespace TitanGate.WebSiteStore.Api.Mappers
 
         public WebSiteSearchObject ModelToEntity(SearchObjectModel model)
         {
-            throw new NotImplementedException();
+            var result = new WebSiteSearchObject
+            {
+                PageNumber = model.PageNumber,
+                PageSize = model.PageSize,
+                SortExpression = new List<(SortColumn, SortOrder)>()
+            };
+
+            foreach(var sort in model.SortFields)
+            {
+                result.SortExpression.Add(((SortColumn)sort.Field, (SortOrder)sort.Order));
+            }
+
+            return result;
         }
     }
 }

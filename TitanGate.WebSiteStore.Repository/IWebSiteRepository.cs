@@ -11,8 +11,8 @@ namespace TitanGate.WebSiteStore.Repository
         Task<WebSite> FindById(int id);
         Task<IEnumerable<WebSite>> FindAll();
         Task<int> Create(WebSite webSite);
-        Task Update(WebSite webSite);
+        Task<bool> Update(WebSite webSite);
         Task<IEnumerable<WebSite>> FindByFilter(WebSiteSearchObject searchObject);
-        Task Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

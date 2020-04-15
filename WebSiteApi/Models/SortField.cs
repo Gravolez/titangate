@@ -5,7 +5,7 @@ namespace TitanGate.WebSiteStore.Api.Models
     [Serializable]
     public class SortField
     {
-        public SortFieldEnum Field { get; set; }
-        public SortOrderEnum Order { get; set; }
+        public SortFieldModelEnum Field { get; set; }
+        public SortOrderModelEnum Order { get; set; }
     }
 }

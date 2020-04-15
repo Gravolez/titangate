@@ -1,39 +1,40 @@
-﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Text;
-using TitanGate.WebSiteStore.Entities;
+using TitanGate.WebSiteStore.Entities.Exceptions;
 using TitanGate.WebSiteStore.Repository;
 
 namespace TitanGate.WebSiteStore.DapperRepository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbTransaction _currentTransaction;
+        private Action _commitCallback;
+        private Action _rollbackCallback;
         private bool _finished = false;
 
-        public UnitOfWork(IDbTransaction dbTransaction)
+        public UnitOfWork(Action commitCallback, Action rollbackCallback)
         {
-            _currentTransaction = dbTransaction;
+            _commitCallback = commitCallback;
+            _rollbackCallback = rollbackCallback;
         }
 
         public void Persist()
         {
-            _currentTransaction.Commit();
             _finished = true;
+            _commitCallback();
         }
 
         public void Rollback()
         {
-            _currentTransaction.Rollback();
             _finished = true;
+            _rollbackCallback();
         }
 
         public void Dispose()
         {
+            if (!_finished)
+            {
+                _rollbackCallback();
+            }
         }
     }
 }

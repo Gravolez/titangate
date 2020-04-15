@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TitanGate.Entities\TitanGate.WebSiteStore.Entities.csproj" />
-    <ProjectReference Include="..\TitanGate.WebSiteStore.RepositoryImpl\TitanGate.WebSiteStore.DapperRepository.csproj" />
     <ProjectReference Include="..\TitanGate.WebSiteStore.Repository\TitanGate.WebSiteStore.Repository.csproj" />
   </ItemGroup>
 

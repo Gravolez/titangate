@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TitanGate.Entities\TitanGate.WebSiteStore.Entities.csproj" />
+    <ProjectReference Include="..\TitanGate.WebSiteStore.RepositoryImpl\TitanGate.WebSiteStore.DapperRepository.csproj" />
     <ProjectReference Include="..\TitanGate.WebSiteStore.Services\TitanGate.WebSiteStore.Services.csproj" />
   </ItemGroup>
 

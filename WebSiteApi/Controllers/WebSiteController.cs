@@ -46,12 +46,22 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         public async Task<IActionResult> Get(int webSiteId)
         {
             WebSite result = await _webSiteService.GetWebSite(webSiteId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             return Ok(_webSiteMapper.EntityToModel(result));
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] WebSiteModel value)
         {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
             WebSite webSite = _webSiteMapper.ModelToEntity(value);
             int id = await _webSiteService.CreateWebSite(webSite);
             return Ok(id);
@@ -62,8 +72,19 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put(int webSiteId, [FromBody] WebSiteModel value)
         {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
             WebSite webSite = _webSiteMapper.ModelToEntity(value);
-            await _webSiteService.UpdateWebSite(webSite);
+            webSite.Id = webSiteId;
+            bool success = await _webSiteService.UpdateWebSite(webSite);
+            if (!success)
+            {
+                return NotFound();
+            }
+
             return Ok();
         }
 
@@ -72,14 +93,24 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int webSiteId)
         {
-            await _webSiteService.DeleteWebSite(webSiteId);
+            bool success = await _webSiteService.DeleteWebSite(webSiteId);
+            if (!success)
+            {
+                return NotFound();
+            }
+
             return Ok();
         }
 
         [HttpPost]
-        [Route("page")]
+        [Route("paged")]
         public async Task<IActionResult> GetPagedResults([FromBody] SearchObjectModel searchObjectModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
             IEnumerable<WebSite> result = await _webSiteService.GetWebSites(_searchObjectMapper.ModelToEntity(searchObjectModel));
             return Ok(result.Select(x => _webSiteMapper.EntityToModel(x)).ToArray());
         }
@@ -105,9 +136,9 @@ namespace TitanGate.WebSiteStore.Api.Controllers
             type = type.Trim('.');
             var mimeType = type switch
             {
+                "png" => "png",
                 "jpeg" => "jpeg",
                 "jpg" => "jpeg",
-                "png" => "png",
                 _ => "jpeg"
             };
             return File(file, $"image/{mimeType}");

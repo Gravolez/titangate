@@ -1,12 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TitanGate.WebSiteStore.Api.Models;
-using TitanGate.WebSiteStore.Entities;
+﻿using TitanGate.WebSiteStore.Api.Models;
 using TitanGate.WebSiteStore.Entities.DB;
-using TitanGate.WebSiteStore.Entities.Exceptions;
 using TitanGate.WebSiteStore.Services;
 
 namespace TitanGate.WebSiteStore.Api.Mappers
@@ -16,7 +9,9 @@ namespace TitanGate.WebSiteStore.Api.Mappers
         private readonly IMapper<CategoryModel, WebSiteCategory> _categoryMapper;
         private readonly ICryptoService _cryptoService;
 
-        public WebSiteMapper(IMapper<CategoryModel, WebSiteCategory> categoryMapper, ICryptoService cryptoService, IOptions<AppSettings> settings)
+        public WebSiteMapper(
+            IMapper<CategoryModel, WebSiteCategory> categoryMapper, 
+            ICryptoService cryptoService)
         {
             _categoryMapper = categoryMapper;
             _cryptoService = cryptoService;
@@ -34,7 +29,8 @@ namespace TitanGate.WebSiteStore.Api.Mappers
                 {
                     Email = webSiteEntity.Email,
                     Password = _cryptoService.Decrypt(webSiteEntity.Password),
-                }
+                },
+                ScreenshotUrl = webSiteEntity.HasScreenshot ? $"/api/website/{webSiteEntity.Id}/screenshot" : null
             };
         }
 
