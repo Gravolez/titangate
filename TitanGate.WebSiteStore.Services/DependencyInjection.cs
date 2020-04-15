@@ -7,7 +7,7 @@ using TitanGate.WebSiteStore.Services;
 
 namespace TitanGate.WebSiteStore.Services
 {
-    public static class IoC
+    public static class DependencyInjection
     {
         public static IServiceCollection AddWebStoreServices(this IServiceCollection services)
         {

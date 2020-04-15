@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": null,\r\n    \"name\": \"Name 1\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 1,\r\n        \"name\": \"Porn\"\r\n    },\r\n    \"email\": \"asd@asd.asd\",\r\n    \"password\": \"mnogo taina parola\",\r\n    \"screenshotUrl\": null\r\n}",
+							"raw": "{\r\n    \"id\": null,\r\n    \"name\": \"Name 1\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 1,\r\n        \"name\": \"Porn\"\r\n    },\r\n    \"login\": {\r\n    \t\"email\": \"asd@asd.asd\",\r\n    \t\"password\": \"mnogo taina parola\"\r\n    },\r\n    \"screenshotUrl\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -113,7 +113,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 10,\r\n    \"name\": \"zorp\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 5,\r\n        \"name\": \"Software\"\r\n    },\r\n    \"email\": \"asd@asd.asd\",\r\n    \"password\": \"great\",\r\n    \"screenshotUrl\": null\r\n}",
+							"raw": "{\r\n    \"id\": 10,\r\n    \"name\": \"zorp\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 5,\r\n        \"name\": \"Software\"\r\n    },\r\n    \"login\": {\r\n    \t\"email\": \"asd@asd.asd\",\r\n    \t\"password\": \"mnogo taina parola\"\r\n    },\r\n    \"screenshotUrl\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -152,6 +152,61 @@
 								"api",
 								"website",
 								"paged"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadScreenshot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "screenshot",
+									"description": "some_file",
+									"type": "file",
+									"src": "/C:/Users/asenk/Desktop/narodno_sybranie_2020.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:61111/api/website/10/screenshot",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website",
+								"10",
+								"screenshot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetScreenshot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:61111/api/website/10/screenshot",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "61111",
+							"path": [
+								"api",
+								"website",
+								"10",
+								"screenshot"
 							]
 						}
 					},

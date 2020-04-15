@@ -6,7 +6,7 @@ using TitanGate.WebSiteStore.Repository;
 
 namespace TitanGate.WebSiteStore.DapperRepository
 {
-    public static class IoC
+    public static class DependencyInjection
     {
         public static IServiceCollection AddWebStoreDapperRepository(this IServiceCollection services)
         {

@@ -14,6 +14,6 @@ namespace TitanGate.WebSiteStore.Services
         Task<IEnumerable<WebSite>> GetAllWebsites();
         Task<IEnumerable<WebSite>> GetWebSites(WebSiteSearchObject searchObject);
         Task UploadFile(int webSiteId, byte[] file, string extension);
-        Task<byte[]> DownloadFile(int webSiteId);
+        Task<(byte[], string)> DownloadFile(int webSiteId);
     }
 }

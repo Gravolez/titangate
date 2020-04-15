@@ -25,7 +25,9 @@ namespace TitanGate.WebSiteStore.Services
         public async Task<int> CreateWebSite(WebSite webSite)
         {
             using var unitOfWork = _session.BeginWork();
-            return await _webSiteRepository.Create(webSite);
+            var result = await _webSiteRepository.Create(webSite);
+            unitOfWork.Persist();
+            return result;
         }
 
         public async Task DeleteWebSite(int webSiteId)
@@ -36,7 +38,10 @@ namespace TitanGate.WebSiteStore.Services
 
         public async Task<IEnumerable<WebSite>> GetAllWebsites()
         {
-            return await _webSiteRepository.FindAll();
+            var result = await _webSiteRepository.FindAll();
+            result.
+
+            return result;
         }
 
         public async Task<WebSite> GetWebSite(int webSiteId)
@@ -53,6 +58,7 @@ namespace TitanGate.WebSiteStore.Services
         {
             using var unitOfWork = _session.BeginWork();
             await _webSiteRepository.Update(webSite);
+            unitOfWork.Persist();
         }
 
         public async Task UploadFile(int webSiteId, byte[] file, string extension)
@@ -72,7 +78,7 @@ namespace TitanGate.WebSiteStore.Services
             unitOFWork.Persist();
         }
 
-        public async Task<byte[]> DownloadFile(int webSiteId)
+        public async Task<(byte[], string)> DownloadFile(int webSiteId)
         {
             using var unitOFWork = _session.BeginWork();
             WebSite webSite = await _webSiteRepository.FindById(webSiteId);
@@ -81,7 +87,8 @@ namespace TitanGate.WebSiteStore.Services
                 throw new WebSiteStoreException("No screenshot for this site");
             }
             (string dir, string fileName) = _fileAccessService.GetFileName(webSiteId, FileCategoryEnum.WebsiteScreenshot, webSite.ScreenshotExt);
-            return await File.ReadAllBytesAsync(Path.Combine(dir, fileName));
+            byte[] file = await File.ReadAllBytesAsync(Path.Combine(dir, fileName));
+            return (file, webSite.ScreenshotExt);
         }
     }
 }

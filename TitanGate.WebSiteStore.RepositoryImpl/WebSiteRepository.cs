@@ -90,8 +90,8 @@ namespace TitanGate.WebSiteStore.DapperRepository
                     CategoryId = @CategoryId, 
                     Email = @Email, 
                     [Password] = @Password,
-                    HasScreenshot = @HasScreenshot
-                    ScreenshotExt = @ScreenshotExt) 
+                    HasScreenshot = @HasScreenshot,
+                    ScreenshotExt = @ScreenshotExt
                 WHERE Id = @Id",
                 FlattenWebSite(webSite),
                 _repositorySession.CurrentTransaction);
@@ -112,7 +112,9 @@ namespace TitanGate.WebSiteStore.DapperRepository
                 Url = website.Url,
                 CategoryId = website.Category.Id,
                 Email = website.Email,
-                Password = website.Password
+                Password = website.Password,
+                HasScreenshot = website.HasScreenshot,
+                ScreenshotExt = website.ScreenshotExt
             };
         }
     }

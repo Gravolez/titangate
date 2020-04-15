@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TitanGate.WebSiteStore.Services;
+using System.IO;
 using System.Security.Cryptography;
 using TitanGate.WebSiteStore.Entities.Exceptions;
-using System.IO;
 
 namespace TitanGate.WebSiteStore.Services
 {
@@ -21,7 +18,8 @@ namespace TitanGate.WebSiteStore.Services
             }
 
             using Aes aesAlg = Aes.Create();
-            ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+            aesAlg.Padding = PaddingMode.PKCS7;
+            ICryptoTransform decryptor = aesAlg.CreateDecryptor(_key, _iv);
 
             byte[] bytes = Convert.FromBase64String(toDecrypt);
             using MemoryStream msDecrypt = new MemoryStream(bytes);
@@ -38,14 +36,20 @@ namespace TitanGate.WebSiteStore.Services
             }
 
             using Aes aesAlg = Aes.Create();
+            aesAlg.Padding = PaddingMode.PKCS7;
             ICryptoTransform encryptor = aesAlg.CreateEncryptor(_key, _iv);
-            using MemoryStream msEncrypt = new MemoryStream();
-            using CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
-            using StreamWriter swEncrypt = new StreamWriter(csEncrypt);
-            swEncrypt.Write(toEncrypt);
-            swEncrypt.Flush();
-            byte[] encrypted = msEncrypt.ToArray();
-            return Convert.ToBase64String(encrypted);
+            using (MemoryStream msEncrypt = new MemoryStream())
+            {
+                using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                {
+                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt) )
+                    {
+                        swEncrypt.Write(toEncrypt);
+                    }
+                    byte[] encrypted = msEncrypt.ToArray();
+                    return Convert.ToBase64String(encrypted);
+                }
+            }
         }
     }
 }

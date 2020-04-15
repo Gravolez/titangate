@@ -101,8 +101,16 @@ namespace TitanGate.WebSiteStore.Api.Controllers
         [Route("{webSiteId}/screenshot")]
         public async Task<IActionResult> DownloadScreenshot([FromRoute]int webSiteId)
         {
-            byte[] file = await _webSiteService.DownloadFile(webSiteId);
-            return File(file, "application/octet-stream");
+            (byte[] file, string type) = await _webSiteService.DownloadFile(webSiteId);
+            type = type.Trim('.');
+            var mimeType = type switch
+            {
+                "jpeg" => "jpeg",
+                "jpg" => "jpeg",
+                "png" => "png",
+                _ => "jpeg"
+            };
+            return File(file, $"image/{mimeType}");
         }
     }
 }
