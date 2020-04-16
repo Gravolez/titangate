@@ -17,6 +17,10 @@ You need:
 
 setup the proper directories and connection strings in `appsettings.json`
 
+## Postman ##
+There is some postman file in the main folder which you can use to play with the api.
+You may have to setup proper urls and stuff
+
 # Assumptions #
 
 ## Login: ##
