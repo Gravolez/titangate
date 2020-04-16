@@ -7,6 +7,7 @@
 ## Initialization ##
 
 Use the provided script in `SQL\init.sql`
+You can also use `SQL\init_data.sql`  to ... init the data.
 
 # How to run the code #
 
@@ -15,6 +16,10 @@ You need:
 * .net core 3.1.3 SDK
 
 setup the proper directories and connection strings in `appsettings.json`
+
+## Postman ##
+There is some postman file in the main folder which you can use to play with the api.
+You may have to setup proper urls and stuff
 
 # Assumptions #
 
@@ -48,4 +53,5 @@ External libraries used:
  - A shitload of other microsoft libraries
  
 Patterns used:
- - unit of work + repository. Well ... not quite because we have to save the entities explicitly and cannot save the whole session as is done in Nhibernate and EntityFramework but it's close enough. The gain of explicitly knowing which thing is saved when is actually not a bad thing to have sometimes. I did not see a reason to optimize one way or the other and I really wanted to try Dapper
+ - unit of work + repository. 
+ - data adapter
