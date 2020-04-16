@@ -1,56 +1,51 @@
-1. Database 
+# Database #
 
-1.1
+## LocalDB##
 `SQLLocalDB c "WebSiteStore"`
 `SQLLocalDB start "WebSiteStore"`
 
-1.2 Initialization
+## Initialization ##
 
 Use the provided script in `SQL\init.sql`
 
-2. How to run the code
+# How to run the code #
 
 You need:
 * visual studio 2019 or something similar
 * .net core 3.1.3 SDK
 
-3. Assumptions
+setup the proper directories and connection strings in `appsettings.json`
 
+# Assumptions #
 
-3.1 Website description
-In the website description there are two things which I would immediately ask about
-* Category
-* Login
+## Login: ##
 
-3.1.1 Category:
+I am returning passwords from the API which seems like it is required, but normally this would have to be discussed and depending on usage some precautions taken.
+For example sending the password through mail or something when needed, but only saving it through the API.
 
-I have no idea what "vertical" means. I googled it - it seems to be a business related term that I am not familiar with.
+## Category: ##
 
-This seems like a catalogue field. Catalogues (fields with preset range of values) can be anywhere between dynamic (i.e. expanding in range very often) or static - like the days in the week for example.
-They can be managed from a separate API or they can be inserted directly with new data - in our case with a new website we could theoretically immediately add it in a new category by itself. This is dependent on what is the meaning of the catalogues and how they are used throughout the application, which is ultimately defined by what is their business logic.
-Do we want to stick to basic categories as much as possible or to have as fine categorization as possible (practically like tagging)?
+This seems to be a catalogue. There are different ways to handle it depending on how dynamic or constant the catalogue is.
+In my case I chose to handle it separately from the websites and new categories cannot be saved together with a new website.
+If I have time I will add a separate API controller for the categories.
 
-I could have just added a string field which would describe the category of the web site, but that would then make it hard to filter websites by category as strings are easy to confuse and hard to query by (expensive sql operation unless you have indexes).
-That said: I ended up implementing some frankenstein, which has some preset categories for which you do not have to go to the DB to get them cause they are often used and will presumably never go away. But also you can dynamically add a new category while saving the website entry.
+## Screenshots: ##
 
-3.1.2 Login:
+It seems more appropriate that files are saved through a second call to the API.
+Also binary data can be stored in DB, but I chose to keep it on the disk. Precautions are taken with splitting the files in max 100 files in a folder cause windows cannot handle too many files in a single folder well.
 
-I cringed a bit when I saw this one. I assume the websites will be read many times and and the login data will be used in a small percentage of those queries.
-So this is why I decided not to return this data over the api.
-I prefer to expose another API which is to send the person the password over to their email.
-Also of course I keep it encrypted in the DB so that if someone gets access to the DB they won't (easily) see the sensitive data. 
+## Dapper: ##
 
+I wanted to try dapper cause I have never used it before and it was a bit tricky. EntityFramework would have saved me a lot of trouble with the SQL, but you win some you lose some.
+And with EntityFramework I could have done a "more proper" unit of work and repository (i.e. pretending that the objects are just collections in memory and we do not really have a db, but that's a fantasy that IRL very rarely can turn out well. I mean ... we have to think about transactions and possible locking of tables and so on even when using proper unit of work and repository pattern ... at least in all real projects I have worked on that have been the case)
 
-3.2 Database:
+Good things is - we can easily replace dapper.
 
-3.2.1 With very fiew entities needing storage I could have gone for NoSQL, but I have never used it
-
-Additional info:
+# Additional info for later to transfer to Design.doc #
 
 External libraries used:
  - Dapper - mini ORM (I've never used it before and wanted to try it out)
- - Microsoft dependency injection *
- - Microsoft.
+ - A shitload of other microsoft libraries
  
 Patterns used:
- - unit of work + repository. Well ... not quite because we have to save the entities explicitly and cannot save the whole session as is done in Nhibernate and EntityFramework but it's close enough. The gain of explicitly knowing which thing is saved when is actually not a bad thing to have sometimes. I did not see a reason to optimize one way or the other.
+ - unit of work + repository. Well ... not quite because we have to save the entities explicitly and cannot save the whole session as is done in Nhibernate and EntityFramework but it's close enough. The gain of explicitly knowing which thing is saved when is actually not a bad thing to have sometimes. I did not see a reason to optimize one way or the other and I really wanted to try Dapper
