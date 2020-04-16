@@ -113,7 +113,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 10,\r\n    \"name\": \"zorp\",\r\n    \"url\": \"https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1\",\r\n    \"category\": {\r\n        \"id\": 5,\r\n        \"name\": \"Software\"\r\n    },\r\n    \"login\": {\r\n    \t\"email\": \"asd@asd.asd\",\r\n    \t\"password\": \"mnogo taina parola\"\r\n    },\r\n    \"screenshotUrl\": null\r\n}",
+							"raw": "{\r\n    \"id\": 7,\r\n    \"name\": \"And anotheraaaaaaaaaaaaaaaa\",\r\n    \"url\": \"http://www.google.com\",\r\n    \"category\": {\r\n        \"id\": 2,\r\n        \"name\": \"Entertainment\"\r\n    },\r\n    \"login\": {\r\n        \"email\": \"heh@heh.heh\",\r\n        \"password\": \"mnogasdasd\"\r\n    },\r\n    \"screenshotUrl\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -141,6 +141,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"pageSize\": 6,\n\t\"pageNumber\": 1,\n\t\"sortFields\": [\n\t\t{ \"field\": \"Name\", \"order\": \"Asc\" },\n\t\t{ \"field\": \"Url\", \"order\": \"Desc\" }\n\t]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:61111/api/website/paged",
 							"protocol": "http",
@@ -159,8 +168,11 @@
 				},
 				{
 					"name": "UploadScreenshot",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "formdata",
@@ -169,7 +181,7 @@
 									"key": "screenshot",
 									"description": "some_file",
 									"type": "file",
-									"src": "/C:/Users/asenk/Desktop/narodno_sybranie_2020.jpg"
+									"src": "/C:/Users/asenk/Desktop/dokoga.jpeg"
 								}
 							]
 						},
@@ -196,18 +208,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:61111/api/website/10/screenshot",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "61111",
-							"path": [
-								"api",
-								"website",
-								"10",
-								"screenshot"
-							]
+							"raw": ""
 						}
 					},
 					"response": []
