@@ -12,8 +12,8 @@ namespace TitanGate.WebSiteStore.Services
         Task<bool> UpdateWebSite(WebSite webSite);
         Task<bool> DeleteWebSite(int webSiteId);
         Task<IEnumerable<WebSite>> GetAllWebsites();
-        Task<IEnumerable<WebSite>> GetWebSites(WebSiteSearchObject searchObject);
+        Task<(IEnumerable<WebSite> webSites, int count)> GetWebSites(WebSiteSearchObject searchObject);
         Task UploadFile(int webSiteId, byte[] file, string extension);
-        Task<(byte[], string)> DownloadFile(int webSiteId);
+        Task<(byte[] contents, string extension)> DownloadFile(int webSiteId);
     }
 }

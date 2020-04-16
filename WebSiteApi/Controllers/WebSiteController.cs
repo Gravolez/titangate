@@ -111,8 +111,9 @@ namespace TitanGate.WebSiteStore.Api.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            IEnumerable<WebSite> result = await _webSiteService.GetWebSites(_searchObjectMapper.ModelToEntity(searchObjectModel));
-            return Ok(result.Select(x => _webSiteMapper.EntityToModel(x)).ToArray());
+            (IEnumerable<WebSite> result, int count) = await _webSiteService.GetWebSites(_searchObjectMapper.ModelToEntity(searchObjectModel));
+            var modelResults = result.Select(x => _webSiteMapper.EntityToModel(x)).ToArray();
+            return Ok(new PagedResult { WebSites = modelResults, TotalCount = count });
         }
 
         [HttpPost()]

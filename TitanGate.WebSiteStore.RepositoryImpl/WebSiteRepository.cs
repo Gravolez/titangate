@@ -50,7 +50,7 @@ namespace TitanGate.WebSiteStore.DapperRepository
                 transaction: _repositorySession.CurrentTransaction);
         }
 
-        public async Task<IEnumerable<WebSite>> FindByFilter(WebSiteSearchObject searchObject)
+        public async Task<(IEnumerable<WebSite> sites, int count)> FindByFilter(WebSiteSearchObject searchObject)
         {
             bool hasSort = searchObject.SortExpression.Count > 0;
             var sortOrder = "ORDER BY #.Id";
@@ -60,29 +60,42 @@ namespace TitanGate.WebSiteStore.DapperRepository
                     "#." + Enum.GetName(typeof(SortColumn), sort.sortColumn) + (sort.sortOrder == SortOrder.Ascending ? " ASC" : " DESC")
                 );
                 sortOrder = "ORDER BY " + string.Join(',', sorts);
-            } 
+            }
 
-            return await _repositorySession.Connection.QueryAsync<WebSite, WebSiteCategory, WebSite>(
-                $@"SELECT 
-                    t.*, 
-                    c.*
-                FROM (
-                    SELECT ws.*,
-                        ROW_NUMBER() OVER (
-                            {sortOrder.Replace("#", "ws")}
-                        ) as RowNumber
-                    FROM dbo.WebSite ws
-                    WHERE ws.IsDeleted = 0
-                ) AS t
-                    INNER JOIN dbo.Category c ON c.id = t.CategoryId
-                WHERE t.RowNumber BETWEEN @PageStart AND @PageEnd
-                {sortOrder.Replace("#", "t")}", 
-                MapWebSite,
-                new { 
-                    PageStart = 1 + ((searchObject.PageNumber - 1) * searchObject.PageSize),
-                    PageEnd = searchObject.PageNumber * searchObject.PageSize
-                },
-                _repositorySession.CurrentTransaction);
+            int count = await _repositorySession.Connection.QuerySingleAsync<int>(
+                            @"SELECT COUNT(*)
+                            FROM dbo.WebSite ws
+                            WHERE ws.IsDeleted = 0",
+                            transaction: _repositorySession.CurrentTransaction);
+
+            IEnumerable<WebSite> sites = new List<WebSite>();
+            if (count > 0)
+            {
+                sites = await _repositorySession.Connection.QueryAsync<WebSite, WebSiteCategory, WebSite>(
+                    $@"SELECT 
+                        t.*, 
+                        c.*
+                    FROM (
+                        SELECT ws.*,
+                            ROW_NUMBER() OVER (
+                                {sortOrder.Replace("#", "ws")}
+                            ) as RowNumber
+                        FROM dbo.WebSite ws
+                        WHERE ws.IsDeleted = 0
+                    ) AS t
+                        INNER JOIN dbo.Category c ON c.id = t.CategoryId
+                    WHERE t.RowNumber BETWEEN @PageStart AND @PageEnd
+                    {sortOrder.Replace("#", "t")}",
+                    MapWebSite,
+                    new
+                    {
+                        PageStart = 1 + ((searchObject.PageNumber - 1) * searchObject.PageSize),
+                        PageEnd = searchObject.PageNumber * searchObject.PageSize
+                    },
+                    _repositorySession.CurrentTransaction);
+            }
+
+            return (sites, count);
         }
 
         public async Task<WebSite> FindById(int id)

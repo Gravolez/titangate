@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TitanGate.WebSiteStore.DapperRepository", "TitanGate.WebSiteStore.RepositoryImpl\TitanGate.WebSiteStore.DapperRepository.csproj", "{F3E8F802-0755-46DA-BE3B-8FB566C61825}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanGate.WebSiteStore.Services.Test", "TitanGate.WebSiteStore.Services.Test\TitanGate.WebSiteStore.Services.Test.csproj", "{0500EFC7-76CF-435F-8831-4598AAC5A41B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F3E8F802-0755-46DA-BE3B-8FB566C61825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3E8F802-0755-46DA-BE3B-8FB566C61825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3E8F802-0755-46DA-BE3B-8FB566C61825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0500EFC7-76CF-435F-8831-4598AAC5A41B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0500EFC7-76CF-435F-8831-4598AAC5A41B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0500EFC7-76CF-435F-8831-4598AAC5A41B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0500EFC7-76CF-435F-8831-4598AAC5A41B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

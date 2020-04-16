@@ -16,7 +16,6 @@ You need:
 
 3. Assumptions
 
-Architecture and design is about optimizing the code according to assumptions what will be done with it.
 
 3.1 Website description
 In the website description there are two things which I would immediately ask about

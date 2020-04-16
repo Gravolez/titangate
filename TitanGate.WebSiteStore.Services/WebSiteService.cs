@@ -49,7 +49,7 @@ namespace TitanGate.WebSiteStore.Services
             return await _webSiteRepository.FindById(webSiteId);
         }
 
-        public async Task<IEnumerable<WebSite>> GetWebSites(WebSiteSearchObject searchObject)
+        public async Task<(IEnumerable<WebSite> webSites, int count)> GetWebSites(WebSiteSearchObject searchObject)
         {
             return await _webSiteRepository.FindByFilter(searchObject);
         }
@@ -79,9 +79,8 @@ namespace TitanGate.WebSiteStore.Services
             unitOFWork.Persist();
         }
 
-        public async Task<(byte[], string)> DownloadFile(int webSiteId)
+        public async Task<(byte[] contents, string extension)> DownloadFile(int webSiteId)
         {
-            using var unitOFWork = _session.BeginWork();
             WebSite webSite = await _webSiteRepository.FindById(webSiteId);
             if (!webSite.HasScreenshot)
             {
