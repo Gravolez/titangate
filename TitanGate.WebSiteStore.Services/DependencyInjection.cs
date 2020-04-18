@@ -13,7 +13,8 @@ namespace TitanGate.WebSiteStore.Services
             return services
                 .AddTransient<IFileAccessService, FileAccessService>()
                 .AddTransient<IWebSiteService, WebSiteService>()
-                .AddTransient<ICryptoService, CryptoService>();
+                .AddTransient<ICryptoService, CryptoService>()
+                .AddTransient<IUserService, UserService>();
         }
     }
 }

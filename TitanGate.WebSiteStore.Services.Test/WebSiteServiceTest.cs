@@ -21,6 +21,18 @@ namespace TitanGate.WebSiteStore.Services.Test
         private Mock<IRepositorySession> _repositorySessionMock;
         private ServiceProvider _serviceProvider;
 
+        private readonly string _testImageFolder = "TestImages";
+
+        public string BaseTestFiles
+        {
+            get
+            {
+                return Path.Combine(
+                    _configuration["BaseAppFolder"],
+                    _configuration["BaseFilesFolder"]);
+            }
+        }
+
         [TestInitialize]
         public void InitTest()
         {
@@ -28,17 +40,15 @@ namespace TitanGate.WebSiteStore.Services.Test
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .Build();
 
-            _services = new ServiceCollection();
-            _services.Configure<AppSettings>(_configuration);
-            _services.AddWebStoreServices();
+            _serviceProvider = ServiceTestHelper.InitProvider(services =>
+            {
+                services.Configure<AppSettings>(_configuration);
+                _webSiteRepositoryMock = new Mock<IWebSiteRepository>();
+                services.AddTransient<IWebSiteRepository>((x) => _webSiteRepositoryMock.Object);
 
-            _webSiteRepositoryMock = new Mock<IWebSiteRepository>();
-            _services.AddTransient<IWebSiteRepository>((serviceProvicer) => _webSiteRepositoryMock.Object);
-
-            _repositorySessionMock = new Mock<IRepositorySession>();
-            _services.AddTransient<IRepositorySession>((serviceProvicer) => _repositorySessionMock.Object);
-
-            _serviceProvider = _services.BuildServiceProvider();
+                _repositorySessionMock = new Mock<IRepositorySession>();
+                services.AddTransient<IRepositorySession>((x) => _repositorySessionMock.Object);
+            });
         }
 
         [TestMethod]
@@ -60,8 +70,7 @@ namespace TitanGate.WebSiteStore.Services.Test
 
             // assert
             var fileBytes = await File.ReadAllBytesAsync(Path.Combine(
-                _configuration["BaseAppFolder"], 
-                _configuration["BaseFilesFolder"],
+                BaseTestFiles,
                 Enum.GetName(typeof(FileCategoryEnum), FileCategoryEnum.WebsiteScreenshot),
                 "01\\23\\45.jpg"));
             CollectionAssert.AreEqual(fileBytes, result.contents);
@@ -70,16 +79,90 @@ namespace TitanGate.WebSiteStore.Services.Test
         }
 
         [TestMethod]
-        public async Task UploadFile__Uploads_file()
+        public async Task UploadFile__When_there_is_previous_screenshot__Deletes_previous_file()
+        {
+            // arrange
+            int webSiteId = 62221;
+            var fileBytes = await File.ReadAllBytesAsync(Path.Combine(
+                BaseTestFiles,
+                _testImageFolder,
+                "test_image_1.jpeg"));
+            var extension = ".jpeg";
+
+            var website = new WebSite
+            {
+                HasScreenshot = true,
+                ScreenshotExt = ".jpg"
+            };
+
+            WebSite savedWebsite = null;
+
+            _webSiteRepositoryMock.Setup(x => x.FindById(webSiteId)).Returns(Task.FromResult(website)).Verifiable();
+            _webSiteRepositoryMock
+                .Setup(x => x.Update(website))
+                .Callback((WebSite w) => savedWebsite = w).Returns(Task.FromResult(true)).Verifiable();
+            
+            string savedFilePath = Path.Combine(
+                    BaseTestFiles,
+                    Enum.GetName(typeof(FileCategoryEnum), FileCategoryEnum.WebsiteScreenshot),
+                    "06\\22\\21.jpeg");
+
+            string oldFilePath = Path.Combine(
+                BaseTestFiles,
+                Enum.GetName(typeof(FileCategoryEnum), FileCategoryEnum.WebsiteScreenshot),
+                "06\\22\\21.jpg");
+
+            string oldFilePathFolder = Path.GetDirectoryName(oldFilePath);
+            if (!Directory.Exists(oldFilePathFolder))
+            {
+                Directory.CreateDirectory(oldFilePathFolder);
+            }
+
+            File.Copy(Path.Combine(
+                BaseTestFiles,
+                _testImageFolder,
+                "test_image_2.jpg"), oldFilePath);
+
+            try
+            {
+                var mockUnitOfWork = new Mock<IUnitOfWork>();
+                _repositorySessionMock.Setup(x => x.BeginWork()).Returns(mockUnitOfWork.Object).Verifiable();
+                mockUnitOfWork.Setup(x => x.Persist()).Verifiable();
+
+                // act
+                var webSiteService = _serviceProvider.GetService<IWebSiteService>();
+                await webSiteService.UploadFile(webSiteId, fileBytes, extension);
+
+                // assert
+                var content = await File.ReadAllBytesAsync(savedFilePath);
+                CollectionAssert.AreEqual(content, fileBytes);
+                _webSiteRepositoryMock.Verify();
+                _repositorySessionMock.Verify();
+                mockUnitOfWork.Verify();
+                Assert.IsNotNull(savedWebsite);
+                Assert.AreEqual(true, savedWebsite.HasScreenshot);
+                Assert.AreEqual(extension, savedWebsite.ScreenshotExt);
+                Assert.IsFalse(File.Exists(oldFilePath));
+            }
+            finally
+            {
+                if (File.Exists(savedFilePath))
+                {
+                    File.Delete(savedFilePath);
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task UploadFile__When_there_is_no_existing_screenshot_and_folder__Creates_missing_directory()
         {
             // arrange
             int webSiteId = 54321;
             var fileBytes = await File.ReadAllBytesAsync(Path.Combine(
-                _configuration["BaseAppFolder"],
-                _configuration["BaseFilesFolder"],
-                Enum.GetName(typeof(FileCategoryEnum), FileCategoryEnum.WebsiteScreenshot),
-                "01\\23\\45.jpg"));
-            var extension = ".jpg";
+                BaseTestFiles,
+                _testImageFolder,
+                "test_image_1.jpeg"));
+            var extension = ".jpeg";
 
             var website = new WebSite
             {
@@ -95,11 +178,11 @@ namespace TitanGate.WebSiteStore.Services.Test
                 .Callback((WebSite w) => savedWebsite = w).Returns(Task.FromResult(true)).Verifiable();
 
 
-            var savedFilePath = Path.Combine(
-                    _configuration["BaseAppFolder"],
-                    _configuration["BaseFilesFolder"],
+            string savedFilePath = Path.Combine(
+                    BaseTestFiles,
                     Enum.GetName(typeof(FileCategoryEnum), FileCategoryEnum.WebsiteScreenshot),
-                    "05\\43\\21.jpg");
+                    "05\\43\\21.jpeg");
+
             try
             {
                 var mockUnitOfWork = new Mock<IUnitOfWork>();

@@ -11,8 +11,9 @@ namespace TitanGate.WebSiteStore.DapperRepository
         public static IServiceCollection AddWebStoreDapperRepository(this IServiceCollection services)
         {
             return services
+                .AddScoped<IRepositorySession, RepositorySession>()
                 .AddTransient<IWebSiteRepository, WebSiteRepository>()
-                .AddScoped<IRepositorySession, RepositorySession>();
+                .AddTransient<IUserRepository, UserRepository>();
         }
     }
 }

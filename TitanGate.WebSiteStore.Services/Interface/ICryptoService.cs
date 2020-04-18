@@ -9,5 +9,7 @@ namespace TitanGate.WebSiteStore.Services
     {
         string Encrypt(string toEncrypt);
         string Decrypt(string toDecrypt);
+        string HashPassword(string password, string salt);
+        byte[] GetSalt();
     }
 }

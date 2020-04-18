@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TitanGate.WebSiteStore.Api.Mappers;
@@ -13,6 +14,7 @@ using TitanGate.WebSiteStore.Services;
 
 namespace TitanGate.WebSiteStore.Api.Controllers
 {
+    [Authorize]
     [Route("api/website")]
     [ApiController]
     public class WebSiteController : ControllerBase

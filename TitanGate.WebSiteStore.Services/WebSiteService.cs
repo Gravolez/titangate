@@ -66,6 +66,13 @@ namespace TitanGate.WebSiteStore.Services
         {
             using var unitOFWork = _session.BeginWork();
             WebSite webSite = await _webSiteRepository.FindById(webSiteId);
+
+            if (webSite.HasScreenshot)
+            {
+                (string oldDir, string oldFileName) =  _fileAccessService.GetFileName(webSiteId, FileCategoryEnum.WebsiteScreenshot, webSite.ScreenshotExt);
+                File.Delete(Path.Combine(oldDir, oldFileName));
+            }
+
             (string dir, string fileName) = _fileAccessService.GetFileName(webSiteId, FileCategoryEnum.WebsiteScreenshot, extension);
             if (!Directory.Exists(dir))
             {
