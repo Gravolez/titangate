@@ -35,7 +35,7 @@ namespace TitanGate.WebSiteStore.DapperRepository
             }
         }
 
-       internal IDbTransaction CurrentTransaction
+        internal IDbTransaction CurrentTransaction
         {
             get
             {

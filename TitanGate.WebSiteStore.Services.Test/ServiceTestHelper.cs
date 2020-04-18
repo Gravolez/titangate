@@ -7,7 +7,7 @@ using TitanGate.WebSiteStore.Entities;
 
 namespace TitanGate.WebSiteStore.Services.Test
 {
-    public class ServiceTestHelper
+    internal class ServiceTestHelper
     {
         public static ServiceProvider InitProvider(Action<ServiceCollection> init)
         {

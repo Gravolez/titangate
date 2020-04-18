@@ -36,9 +36,7 @@ namespace TitanGate.WebSiteStore.Services.Test
         [TestInitialize]
         public void InitTest()
         {
-            _configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-                .Build();
+            _configuration = ServiceTestHelper.LoadTestConfiguration();
 
             _serviceProvider = ServiceTestHelper.InitProvider(services =>
             {
